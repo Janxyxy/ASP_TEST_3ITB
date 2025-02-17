@@ -1,0 +1,6 @@
+@ASP_TEST_3ITB_HostAddress = http://localhost:5244
+
+GET {{ASP_TEST_3ITB_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
