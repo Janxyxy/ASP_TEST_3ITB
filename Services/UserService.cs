@@ -4,6 +4,8 @@ namespace ASP_TEST_3ITB.Services
 {
     public class UserService : IUserService
     {
+        //private readonly AppDbContext _context;
+
         /* Dependency injection */
         public UserService()
         {
@@ -13,11 +15,20 @@ namespace ASP_TEST_3ITB.Services
         public async Task AddUserAsync(User user)
         {
             Console.WriteLine("User added");
+
+            /*
+             _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
+             */
+
         }
 
         public async Task<User> GetUserAsync(int id)
         {
             Console.WriteLine($"Searching for User { id } ");
+            // return await _context.Users.FindAsync(id);
+
             return new User(); // TODO Implement
         }
 

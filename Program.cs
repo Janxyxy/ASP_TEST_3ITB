@@ -7,7 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+/*
+ * builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 0, 25))));
+ */
 builder.Services.AddScoped<IUserService, UserService>();
+
 
 var app = builder.Build();
 
@@ -25,6 +31,6 @@ app.MapControllers();
 app.Run();
 
 /* TODO:
-     user service 
-     pøipojení k DB (entity framework?)
+     pøipojení k DB (entity framework?) - later
+     + storage classes
  */
