@@ -3,7 +3,12 @@ using ASP_TEST_3ITB.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+/*
+ Pøíkazy na vytvoøení migrace a odeslání update požadavku
+    dotnet watch run
+    dotnet ef migrations add InitialCreate
+    dotnet ef database update
+ */
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
