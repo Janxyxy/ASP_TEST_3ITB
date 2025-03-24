@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ASP_TEST_3ITB.Models;
 using ASP_TEST_3ITB.Services;
+using System.Threading.Tasks;
 
 namespace ASP_TEST_3ITB.Controllers
 {
@@ -10,18 +11,31 @@ namespace ASP_TEST_3ITB.Controllers
     {
         private readonly IUserService _userService;
 
-        public UserController(
-            IUserService userService
-            )
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
 
         [HttpGet]
-        [Route("")]
-        public User GetUser()
+        [Route("{id}")]
+        public async Task<IActionResult> GetUser(int id)
         {
-            return new User();
+            var user = await _userService.GetUserAsync(id);
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
+        [HttpGet]
+        [Route("search/{pattern}")]
+        public async Task<IActionResult> GetUsersByPattern(string pattern)
+        {
+            var users = await _userService.GetUsersByPatternAsync(pattern);
+            if (users == null || users.Count == 0)
+                return NotFound();
+
+            return Ok(users);
         }
 
         [HttpPost]
@@ -33,20 +47,44 @@ namespace ASP_TEST_3ITB.Controllers
 
             await _userService.AddUserAsync(user);
 
-            return Ok(); 
+            return Ok();
         }
 
         [HttpPut]
-        [Route("")]
-        public void UpdateUser()
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, User user)
         {
+            if (user == null || id != user.Id)
+                return BadRequest();
+
+            var existingUser = await _userService.GetUserAsync(id);
+            if (existingUser == null)
+                return NotFound();
+
+            existingUser.Name = user.Name;
+            existingUser.Email = user.Email;
+            existingUser.Password = user.Password;
+            existingUser.IsMale = user.IsMale;
+            existingUser.Deleted = user.Deleted;
+            existingUser.Role = user.Role;
+
+            await _userService.AddUserAsync(existingUser);
+
+            return Ok();
         }
 
         [HttpDelete]
-        [Route("")]
-        public void DeleteUser()
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
         {
+            var user = await _userService.GetUserAsync(id);
+            if (user == null)
+                return NotFound();
 
+            user.Deleted = true;
+            await _userService.AddUserAsync(user);
+
+            return Ok();
         }
     }
 }

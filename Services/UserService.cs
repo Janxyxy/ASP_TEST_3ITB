@@ -1,4 +1,5 @@
 ﻿using ASP_TEST_3ITB.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASP_TEST_3ITB.Services
 {
@@ -31,15 +32,20 @@ namespace ASP_TEST_3ITB.Services
         public async Task<User> GetUserAsync(int id)
         {
             Console.WriteLine($"Searching for User { id } ");
-            // return await _context.Users.FindAsync(id);
-
-            return new User(); // TODO Implement
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                throw new Exception($"User with id {id} not found");
+            }
+            return user;
         }
 
         public async Task<List<User>> GetUsersByPatternAsync(string pattern)
         {
             Console.WriteLine($"Searching for Users with pattern {pattern} ");
-            return new List<User>(); // TODO Implement
+            return await _context.Users
+                .Where(u => u.Name.Contains(pattern) || u.Email.Contains(pattern))
+                .ToListAsync();
         }
     }
 }
