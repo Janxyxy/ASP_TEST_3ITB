@@ -4,24 +4,28 @@ namespace ASP_TEST_3ITB.Services
 {
     public class UserService : IUserService
     {
-        //private readonly AppDbContext _context;
+        private readonly AppDbContext _context;
 
         /* Dependency injection */
-        public UserService()
+        public UserService(AppDbContext db)
         {
-
+            _context = db;
         }
 
         public async Task AddUserAsync(User user)
         {
             Console.WriteLine("User added");
 
-            /*
-             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
-             */
-
+            var res = _context.Users.Add(user);
+            int affectedRows = await _context.SaveChangesAsync();
+            
+            if(affectedRows > 0)
+            {
+                return;
+            } else
+            {
+                throw new Exception("Cannot add user");
+            }
         }
 
         public async Task<User> GetUserAsync(int id)

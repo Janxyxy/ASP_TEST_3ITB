@@ -26,9 +26,14 @@ namespace ASP_TEST_3ITB.Controllers
 
         [HttpPost]
         [Route("")]
-        public void AddUser()
+        public async Task<IActionResult> AddUser(User user)
         {
+            if (user == null)
+                return BadRequest();
 
+            await _userService.AddUserAsync(user);
+
+            return Ok(); 
         }
 
         [HttpPut]
